@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'bootstrap/scss/bootstrap' as *;
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+:root {
+  --app-bg: #f4f6fc;
+  --sidebar-width: 80px;
+  --radius-xl: 24px;
+}
+
+body {
+  background-color: var(--app-bg);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
