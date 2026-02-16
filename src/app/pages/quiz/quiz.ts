@@ -22,7 +22,7 @@ interface CardData {
         @if (!quizFinished()) {
           <div class="w-100 d-flex flex-column align-items-center gap-4">
             
-            <img ngSrc="https://placehold.co/80" width="80" height="80" alt="Robot Helper" class="mb-2" />
+            <img ngSrc="assets/robot-icon.png" width="80" height="80" alt="Robot Helper" class="mb-2" />
 
             <app-flashcard
               [question]="currentCard().question"
