@@ -20,6 +20,7 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+firebase.config.ts
 
 # Visual Studio Code
 .vscode/*
