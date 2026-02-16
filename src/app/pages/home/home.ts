@@ -18,7 +18,7 @@ import { UploadContainer } from '../../components/upload-container/upload-contai
             <app-upload-container (fileDropped)="handleFile($event)">
               <div class="d-flex flex-column align-items-center gap-3">
                 <h4 class="text-primary fw-bold">Aggiungi il tuo .pdf qui</h4>
-                <img ngSrc="https://placehold.co/80" width="80" height="80" alt="Robot Icon" />
+                <img ngSrc="assets/robot-icon.png" width="80" height="80" alt="Robot Icon" />
                 <button class="btn btn-primary rounded-pill px-4 mt-3">Scegli file</button>
               </div>
             </app-upload-container>
@@ -28,7 +28,7 @@ import { UploadContainer } from '../../components/upload-container/upload-contai
             <div class="speech-bubble bg-white p-4 rounded-4 shadow-sm mb-4 d-inline-block">
               <h5 class="m-0">Nessun quiz disponibile...</h5>
             </div>
-            <img ngSrc="https://placehold.co/300x400" width="300" height="400" priority alt="Assistant Robot" />
+            <img ngSrc="assets/assistant-robot.png" width="300" height="400" priority alt="Assistant Robot" />
           </div>
 
         </div>
