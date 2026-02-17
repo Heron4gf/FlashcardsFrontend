@@ -8,23 +8,40 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   template: `
     <nav class="d-flex flex-column justify-content-between align-items-center py-4 h-100 shadow-sm bg-white rounded-pill">
       
+      <!-- HOME -->
       <div class="nav-group">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link" aria-label="Home">
+        <a 
+          routerLink="/" 
+          routerLinkActive="active" 
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link"
+          aria-label="Home">
           <i class="bi bi-house-door-fill fs-4"></i>
         </a>
       </div>
 
+      <!-- ADD QUIZ -->
       <div class="nav-group">
-        <button type="button" class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center add-btn" aria-label="Add New">
+        <a 
+          routerLink="/quiz"
+          routerLinkActive="active"
+          class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center add-btn"
+          aria-label="Quiz">
           <i class="bi bi-plus fs-2"></i>
-        </button>
+        </a>
       </div>
 
+      <!-- QUIZ LIST -->
       <div class="nav-group">
-        <button type="button" class="nav-link border-0 bg-transparent" aria-label="Nuovo">
-          <i class="bi-card-text fs-4"></i>
-        </button>
+        <a 
+          routerLink="/quiz"
+          routerLinkActive="active"
+          class="nav-link"
+          aria-label="Quiz List">
+          <i class="bi bi-card-text fs-4"></i>
+        </a>
       </div>
+
     </nav>
   `,
   styles: [`
@@ -48,27 +65,30 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       justify-content: center;
       color: #adb5bd;
       transition: all 0.2s ease;
+      text-decoration: none;
+    }
 
-      &:hover {
-        color: #0d6efd;
-        background-color: #f8f9fa;
-      }
+    .nav-link:hover {
+      color: #0d6efd;
+      background-color: #f8f9fa;
+    }
 
-      &.active {
-        color: #ffffff;
-        background-color: #0d6efd;
-        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
-      }
+    .nav-link.active {
+      color: #ffffff;
+      background-color: #0d6efd;
+      box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
     }
 
     .add-btn {
       width: 56px;
       height: 56px;
       border-width: 2px;
-      &:hover {
-        border-color: #0d6efd;
-        color: #0d6efd;
-      }
+      text-decoration: none;
+    }
+
+    .add-btn:hover {
+      border-color: #0d6efd;
+      color: #0d6efd;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
