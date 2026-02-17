@@ -66,7 +66,7 @@ interface CardData {
               <div class="speech-bubble bg-white p-4 rounded-4 shadow-sm mb-3">
                 <h4 class="m-0 text-dark">Hai totalizzato {{ totalScore() }}pt</h4>
               </div>
-              <img ngSrc="https://placehold.co/200" width="200" height="200" alt="Happy Robot" priority />
+              <img ngSrc="assets/assistant-robot.png" width="200" height="200" alt="Happy Robot" priority />
             </div>
 
             <div class="mt-4">
