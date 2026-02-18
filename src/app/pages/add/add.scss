@@ -1,0 +1,24 @@
+// Colore di sfondo simile allo screenshot (Light Cyan/Blue)
+.bg-light-blue {
+  background-color: #d0f0fd; 
+  min-height: 100vh;
+}
+
+.main-content {
+  // Lascia spazio per la sidebar fissa a sinistra
+  padding-left: 110px;
+  
+  // Assicura che il contenuto sia centrato verticalmente
+  min-height: 100vh;
+}
+
+// Personalizzazione specifica per il pulsante se necessario, 
+// altrimenti eredita da Bootstrap btn-primary
+.btn-primary {
+  background-color: #1fa2ff; // Esempio di blu acceso dallo screenshot
+  border-color: #1fa2ff;
+  
+  &:hover {
+    background-color: darken(#1fa2ff, 10%);
+  }
+}

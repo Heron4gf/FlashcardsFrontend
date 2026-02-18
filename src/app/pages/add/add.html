@@ -1,1 +1,23 @@
-<p>add works!</p>
+<div class="container-fluid p-0 bg-light-blue">
+  <app-sidebar />
+  
+  <main class="main-content d-flex align-items-center justify-content-center min-vh-100">
+    <div class="row w-100 justify-content-center">
+      
+      <div class="col-12 col-md-8 col-lg-6">
+        <app-upload-container (fileDropped)="handleFile($event)">
+          <div class="d-flex flex-column align-items-center gap-4 py-5">
+            <h4 class="text-primary fw-bold mb-3">Aggiungi il tuo .pdf qui</h4>
+            
+            <img ngSrc="assets/robot-grad-icon.png" width="120" height="120" priority alt="Robot Student Icon" />
+            
+            <button class="btn btn-primary rounded-pill px-5 py-2 mt-4 fw-medium">
+              Scegli file
+            </button>
+          </div>
+        </app-upload-container>
+      </div>
+
+    </div>
+  </main>
+</div>
