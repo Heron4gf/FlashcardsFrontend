@@ -7,43 +7,8 @@ import { UploadContainer } from '../../components/upload-container/upload-contai
   selector: 'app-home',
   standalone: true,
   imports: [Sidebar, UploadContainer, NgOptimizedImage],
-  template: `
-    <div class="container-fluid p-0">
-      <app-sidebar />
-      
-      <main class="main-content d-flex align-items-center justify-content-center min-vh-100">
-        <div class="row w-100 justify-content-center align-items-center">
-          
-          <div class="col-12 col-lg-6 mb-4 mb-lg-0">
-            <app-upload-container (fileDropped)="handleFile($event)">
-              <div class="d-flex flex-column align-items-center gap-3">
-                <h4 class="text-primary fw-bold">Aggiungi il tuo .pdf qui</h4>
-                <img ngSrc="assets/robot-icon.png" width="80" height="80" alt="Robot Icon" />
-                <button class="btn btn-primary rounded-pill px-4 mt-3">Scegli file</button>
-              </div>
-            </app-upload-container>
-          </div>
-
-          <div class="col-lg-4 d-none d-lg-block text-center position-relative">
-            <div class="speech-bubble bg-white p-4 rounded-4 shadow-sm mb-4 d-inline-block">
-              <h5 class="m-0">Nessun quiz disponibile...</h5>
-            </div>
-            <img ngSrc="assets/assistant-robot.png" width="300" height="400" priority alt="Assistant Robot" />
-          </div>
-
-        </div>
-      </main>
-    </div>
-  `,
-  styles: [`
-    .main-content {
-      padding-left: 110px;
-    }
-    .speech-bubble {
-      position: relative;
-      top: -20px;
-    }
-  `],
+  templateUrl: './home.html',
+  styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Home {
