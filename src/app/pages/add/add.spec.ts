@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Add } from './add';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { UploadContainer } from '../../components/upload-container/upload-container';
-import { provideHttpClient } from '@angular/common/http'; // Spesso necessario se Sidebar usa icone/http
+import { provideHttpClient } from '@angular/common/http';
 
 describe('Add', () => {
   let component: Add;
@@ -16,8 +16,6 @@ describe('Add', () => {
         UploadContainer
       ],
       providers: [
-        // Se i componenti figli usano servizi (es. Router, HttpClient), aggiungili qui
-        // provideHttpClient(), 
       ]
     })
     .compileComponents();
