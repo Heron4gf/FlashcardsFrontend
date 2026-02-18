@@ -23,7 +23,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       <!-- ADD QUIZ -->
       <div class="nav-group">
         <a 
-          routerLink="/quiz"
+          routerLink="/add"
           routerLinkActive="active"
           class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center add-btn"
           aria-label="Quiz">
