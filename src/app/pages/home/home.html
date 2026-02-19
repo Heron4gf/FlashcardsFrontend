@@ -4,7 +4,7 @@
         <div class="row w-100 justify-content-center align-items-center">
 
             <!-- IF: sempre false per testare il branch else -->
-            <ng-container *ngIf="false; else foldersBlock">
+            @if (false) {
 
                 <div class="col-12 col-lg-6 mb-4 mb-lg-0">
                     <app-upload-container (fileDropped)="handleFile($event)">
@@ -23,29 +23,19 @@
                     <img ngSrc="assets/assistant-robot.png" width="300" height="400" priority alt="Assistant Robot" />
                 </div>
 
-            </ng-container>
+            } @else {
 
-            <!-- ELSE: cartelle hardcoded -->
-            <ng-template #foldersBlock>
+                <!-- ELSE: cartelle in loop -->
                 <div class="col-12 d-flex flex-wrap justify-content-center gap-4">
-                    <app-folder-preview
-                        label="Matematica"
-                        previewText="Capitolo 1: Derivate e integrali..."
-                    />
-                    <app-folder-preview
-                        label="Ingegneria"
-                        previewText="Circuiti RC: tensione e corrente..."
-                    />
-                    <app-folder-preview
-                        label="Informatica"
-                        previewText="Algoritmi di ordinamento: QuickSort..."
-                    />
-                    <app-folder-preview
-                        label="Fisica"
-                        previewText="Meccanica classica: leggi di Newton..."
-                    />
+                    @for (folder of folders; track folder.label) {
+                        <app-folder-preview
+                            [label]="folder.label"
+                            [previewText]="folder.previewText"
+                        />
+                    }
                 </div>
-            </ng-template>
+
+            }
 
         </div>
     </main>
