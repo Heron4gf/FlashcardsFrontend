@@ -1,0 +1,69 @@
+.folder-wrapper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  width: 120px;
+
+  // La card parte nascosta DIETRO la cartella
+  .preview-card {
+    position: absolute;
+    bottom: 40px; // appena dietro la cartella
+    left: 50%;
+    transform: translateX(-50%) translateY(0px);
+    width: 100px;
+    min-height: 70px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    padding: 10px 12px;
+    z-index: 0; // sotto la cartella
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.25s ease;
+    pointer-events: none;
+
+    p {
+      margin: 0;
+      font-size: 13px;
+      color: #333;
+      font-family: sans-serif;
+      line-height: 1.4;
+    }
+  }
+
+  .folder {
+    position: relative;
+    z-index: 1; // sopra la card
+    width: 100px;
+    transition: transform 0.2s ease;
+
+    svg {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+  }
+
+  .folder-label {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a90d9;
+    font-family: sans-serif;
+  }
+
+  // ---- HOVER ----
+  &:hover {
+    .preview-card {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-55px); // esce in su
+      z-index: 0;
+    }
+
+    .folder {
+      transform: translateY(4px); // leggero abbassamento della cartella
+    }
+  }
+}
