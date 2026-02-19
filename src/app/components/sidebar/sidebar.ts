@@ -6,7 +6,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <nav class="d-flex flex-column justify-content-between align-items-center py-4 h-100 shadow-sm bg-white rounded-pill">
+    <nav class="d-flex flex-column justify-content-between align-items-center py-4 h-100 rounded-pill shadow-lg" style="background-color: #EAF4FF;">
       
       <!-- HOME -->
       <div class="nav-group">
