@@ -8,7 +8,7 @@ import { FolderPreview } from '../../components/folder-preview/folder-preview';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [Sidebar, UploadContainer, NgOptimizedImage, NgIf,FolderPreview],
+  imports: [Sidebar, UploadContainer, NgOptimizedImage, NgIf, FolderPreview],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
