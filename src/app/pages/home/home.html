@@ -26,7 +26,7 @@
             } @else {
 
                 <!-- ELSE: cartelle in loop -->
-                <div class="col-12 d-flex flex-wrap justify-content-center gap-4">
+                    <div class="col-12 folder-grid">
                     @for (folder of folders; track folder.label) {
                         <app-folder-preview
                             [label]="folder.label"
