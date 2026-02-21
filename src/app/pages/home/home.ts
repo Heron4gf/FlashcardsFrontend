@@ -11,6 +11,8 @@ interface FileItem {
   id: number;
   name: string;
   preview: string;
+  displayName: string; // nome troncato per UI
+  fullName: string;    // nome completo per hover
 }
 
 @Component({
@@ -50,18 +52,43 @@ export class Home implements OnInit {
       const token = await user.getIdToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       
-      this.http.get<FileItem[]>('http://localhost:9090/api/v1/get-files', { headers })
-        .subscribe({
-          next: (response) => {
-            this.files.set(response);
-            this.loading.set(false);
-          },
-          error: (err) => {
-            console.error('Errore caricamento file:', err);
-            this.error.set('Impossibile caricare i file');
-            this.loading.set(false);
-          }
-        });
+      this.http.get<Omit<FileItem, 'displayName' | 'fullName'>[]>(
+        'http://localhost:9090/api/v1/get-files',
+        { headers }
+      )
+      .subscribe({
+        next: (response) => {
+
+          const formattedFiles: FileItem[] = response.map(file => {
+
+            // Rimuove .pdf (case insensitive)
+            const fullName = file.name
+              .replace(/\.pdf$/i, '')
+              .replace(/_/g, ' ');
+
+            // Tronca a 20 caratteri
+            const displayName =
+              fullName.length > 20
+                ? fullName.substring(0, 20) + '...'
+                : fullName;
+
+            return {
+              ...file,
+              fullName,
+              displayName
+            };
+          });
+
+          this.files.set(formattedFiles);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error('Errore caricamento file:', err);
+          this.error.set('Impossibile caricare i file');
+          this.loading.set(false);
+        }
+      });
+
     } catch (err) {
       this.error.set('Errore di autenticazione');
       this.loading.set(false);

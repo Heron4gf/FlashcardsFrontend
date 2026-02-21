@@ -25,7 +25,8 @@
                 <div class="col-12 folder-grid">
                     @for (file of files(); track file.id) {
                         <app-folder-preview
-                            [label]="file.name"
+                            [label]="file.displayName"
+                            [title]="file.fullName"
                             [previewText]="file.preview"
                             (click)="openQuiz(file.id)"
                             style="cursor: pointer;"
