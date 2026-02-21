@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { getAuth } from 'firebase/auth';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { UploadContainer } from '../../components/upload-container/upload-container';
@@ -22,8 +23,8 @@ interface FileItem {
 })
 export class Home implements OnInit {
   private http = inject(HttpClient);
+  private router = inject(Router);
   
-  // Signal con i file dell'utente dal backend
   files = signal<FileItem[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
@@ -67,9 +68,11 @@ export class Home implements OnInit {
     }
   }
 
+  openQuiz(fileId: number) {
+    this.router.navigate(['/quiz', fileId]);
+  }
+
   handleFile(file: File) {
     console.log('File received:', file);
-    // Se vuoi anche qui l'upload, copia la logica da add.ts
-    // e poi ricarica la lista con this.loadFiles()
   }
 }

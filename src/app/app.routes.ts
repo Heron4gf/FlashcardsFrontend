@@ -18,7 +18,7 @@ export const routes: Routes = [
     canActivate: [authGuard] 
   },
   { 
-    path: 'quiz', 
+    path: 'quiz/:fileId', 
     component: Quiz, 
     canActivate: [authGuard] 
   },

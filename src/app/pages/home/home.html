@@ -27,6 +27,8 @@
                         <app-folder-preview
                             [label]="file.name"
                             [previewText]="file.preview"
+                            (click)="openQuiz(file.id)"
+                            style="cursor: pointer;"
                         />
                     }
                 </div>
