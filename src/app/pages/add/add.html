@@ -11,9 +11,20 @@
             
             <img ngSrc="assets/robot-icon.png" width="120" height="120" priority alt="Robot Icon" />
             
-            <button class="btn btn-primary rounded-pill px-5 py-2 mt-4 fw-medium">
-              Scegli file
+            <button class="btn btn-primary rounded-pill px-5 py-2 mt-4 fw-medium" [disabled]="loading()">
+              @if (loading()) {
+                Caricamento...
+              } @else {
+                Scegli file
+              }
             </button>
+            
+            <!-- Messaggio di errore -->
+            @if (errorMessage()) {
+              <div class="alert alert-danger mt-3 w-100 text-center" role="alert">
+                {{ errorMessage() }}
+              </div>
+            }
           </div>
         </app-upload-container>
       </div>

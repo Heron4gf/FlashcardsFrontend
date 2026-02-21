@@ -3,9 +3,7 @@
     <main class="main-content d-flex align-items-center justify-content-center min-vh-100">
         <div class="row w-100 justify-content-center align-items-center">
 
-            <!-- IF: sempre false per testare il branch else -->
-            @if (false) {
-
+            @if (files().length === 0) {
                 <div class="col-12 col-lg-6 mb-4 mb-lg-0">
                     <app-upload-container (fileDropped)="handleFile($event)">
                         <div class="d-flex flex-column align-items-center gap-3">
@@ -24,17 +22,14 @@
                 </div>
 
             } @else {
-
-                <!-- ELSE: cartelle in loop -->
                 <div class="col-12 d-flex flex-wrap justify-content-center gap-4">
-                    @for (folder of folders; track folder.label) {
+                    @for (file of files(); track file.id) {
                         <app-folder-preview
-                            [label]="folder.label"
-                            [previewText]="folder.previewText"
+                            [label]="file.name"
+                            [previewText]="file.preview"
                         />
                     }
                 </div>
-
             }
 
         </div>
