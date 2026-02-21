@@ -22,7 +22,7 @@
                 </div>
 
             } @else {
-                <div class="col-12 d-flex flex-wrap justify-content-center gap-4">
+                <div class="col-12 folder-grid">
                     @for (file of files(); track file.id) {
                         <app-folder-preview
                             [label]="file.name"

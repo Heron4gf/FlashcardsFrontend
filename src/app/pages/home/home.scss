@@ -5,3 +5,13 @@
     position: relative;
     top: -20px;
 }
+.folder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 40px;
+    justify-items: center;
+
+    padding-top: 80px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
