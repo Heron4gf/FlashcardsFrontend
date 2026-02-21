@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { getAuth } from 'firebase/auth';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { UploadContainer } from '../../components/upload-container/upload-container';
+import { environment } from '../../environments/environment.local';
 
 @Component({
   selector: 'app-add',
@@ -44,7 +45,7 @@ export class Add {
       const token = await user.getIdToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-      this.http.post('http://localhost:9090/api/v1/upload-file', formData, { headers })
+      this.http.post(`${environment.apiBaseUrl}/files`, formData, { headers })
         .subscribe({
           next: (response) => {
             console.log('Upload ok:', response);

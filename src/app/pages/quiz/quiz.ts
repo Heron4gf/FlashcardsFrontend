@@ -5,6 +5,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { getAuth } from 'firebase/auth';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Flashcard } from '../../components/flashcard/flashcard';
+import { environment } from '../../environments/environment.local';
 
 interface CardData {
   question: string;
@@ -23,7 +24,7 @@ export class Quiz implements OnInit {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   
-  fileId = signal<number | null>(null);
+  fileId = signal<string | null>(null);
   cards = signal<CardData[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
@@ -37,8 +38,8 @@ export class Quiz implements OnInit {
   isLastCard = computed(() => this.currentIndex() === this.cards().length - 1);
 
   async ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('fileId'));
-    if (!id || isNaN(id)) {
+    const id = this.route.snapshot.paramMap.get('fileId');
+    if (!id) {
       this.error.set('ID file non valido');
       this.loading.set(false);
       return;
@@ -48,7 +49,7 @@ export class Quiz implements OnInit {
     await this.loadFlashcards(id);
   }
 
-  async loadFlashcards(id: number) {
+  async loadFlashcards(id: string) {
     const auth = getAuth();
     const user = auth.currentUser;
     
@@ -63,8 +64,8 @@ export class Quiz implements OnInit {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       
       this.http.post<CardData[]>(
-        'http://localhost:9090/api/v1/get-flashcards',
-        { id, limit: 20 },
+        `${environment.apiBaseUrl}/files/${id}/flashcards`,
+        { limit: 20 },
         { headers }
       ).subscribe({
         next: (response) => {
