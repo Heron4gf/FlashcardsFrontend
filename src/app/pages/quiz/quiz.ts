@@ -1,16 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgOptimizedImage } from '@angular/common';
-import { getAuth } from 'firebase/auth';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Flashcard } from '../../components/flashcard/flashcard';
-import { environment } from '../../environments/environment.local';
-
-interface CardData {
-  question: string;
-  answer: string;
-}
+import { QuizService, CardData } from '../../services/quiz.service';
 
 @Component({
   selector: 'app-quiz',
@@ -21,7 +14,7 @@ interface CardData {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Quiz implements OnInit {
-  private http = inject(HttpClient);
+  private quizService = inject(QuizService);
   private route = inject(ActivatedRoute);
   
   fileId = signal<string | null>(null);
@@ -50,42 +43,21 @@ export class Quiz implements OnInit {
   }
 
   async loadFlashcards(id: string) {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    
-    if (!user) {
-      this.error.set('Utente non autenticato');
-      this.loading.set(false);
-      return;
-    }
-
-    try {
-      const token = await user.getIdToken();
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      
-      this.http.post<CardData[]>(
-        `${environment.apiBaseUrl}/files/${id}/flashcards`,
-        { limit: 20 },
-        { headers }
-      ).subscribe({
-        next: (response) => {
-          this.cards.set(response);
-          this.loading.set(false);
-          
-          if (response.length === 0) {
-            this.error.set('Nessuna flashcard trovata per questo file');
-          }
-        },
-        error: (err) => {
-          console.error('Errore caricamento flashcard:', err);
-          this.error.set(err.error?.detail || 'Errore nel caricamento delle flashcard');
-          this.loading.set(false);
+    this.quizService.getFlashcards(id, 20).subscribe({
+      next: (response) => {
+        this.cards.set(response);
+        this.loading.set(false);
+        
+        if (response.length === 0) {
+          this.error.set('Nessuna flashcard trovata per questo file');
         }
-      });
-    } catch (err) {
-      this.error.set('Errore di autenticazione');
-      this.loading.set(false);
-    }
+      },
+      error: (err) => {
+        console.error('Errore caricamento flashcard:', err);
+        this.error.set(err.error?.detail || 'Errore nel caricamento delle flashcard');
+        this.loading.set(false);
+      }
+    });
   }
 
   toggleFlip() {

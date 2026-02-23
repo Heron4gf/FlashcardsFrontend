@@ -1,20 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { PLATFORM_ID, ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import { NgOptimizedImage, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { getAuth } from 'firebase/auth';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { UploadContainer } from '../../components/upload-container/upload-container';
 import { FolderPreview } from '../../components/folder-preview/folder-preview';
-import { environment } from '../../environments/environment.local';
-
-interface FileItem {
-  id: string;
-  name: string;
-  preview: string;
-  displayName: string; // nome troncato per UI
-  fullName: string;    // nome completo per hover
-}
+import { FileService, FileItem } from '../../services/file.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +15,8 @@ interface FileItem {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Home implements OnInit {
-  private http = inject(HttpClient);
+  private platformId = inject(PLATFORM_ID);
+  private fileService = inject(FileService);
   private router = inject(Router);
 
   files = signal<FileItem[]>([]);
@@ -43,52 +34,24 @@ export class Home implements OnInit {
   }
 
   async loadFiles() {
-    this.loading.set(true);
-    this.error.set(null);
-
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (!user) {
-      this.error.set('Utente non autenticato');
-      this.loading.set(false);
+    if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    try {
-      const token = await user.getIdToken();
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.loading.set(true);
+    this.error.set(null);
 
-      this.http.get<Omit<FileItem, 'displayName' | 'fullName'>[]>(
-        `${environment.apiBaseUrl}/files`,
-        { headers }
-      )
-      .subscribe({
-        next: (response) => {
-          const formattedFiles: FileItem[] = response.map(file => {
-            const fullName = file.name
-              .replace(/\.pdf$/i, '')
-              .replace(/_/g, ' ');
-
-            const displayName =
-              fullName.length > 20 ? fullName.substring(0, 20) + '...' : fullName;
-
-            return { ...file, fullName, displayName };
-          });
-
-          this.files.set(formattedFiles);
-          this.loading.set(false);
-        },
-        error: (err) => {
-          console.error('Errore caricamento file:', err);
-          this.error.set('Impossibile caricare i file');
-          this.loading.set(false);
-        }
-      });
-    } catch {
-      this.error.set('Errore di autenticazione');
-      this.loading.set(false);
-    }
+    this.fileService.getFiles().subscribe({
+      next: (formattedFiles) => {
+        this.files.set(formattedFiles);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Errore caricamento file:', err);
+        this.error.set('Impossibile caricare i file');
+        this.loading.set(false);
+      }
+    });
   }
 
   openQuiz(fileId: string) {
@@ -96,7 +59,21 @@ export class Home implements OnInit {
   }
 
   handleFile(file: File) {
-    console.log('File received:', file);
+    // Reset stato
+    this.error.set(null);
+    this.loading.set(true);
+
+    this.fileService.handleFile(
+      file,
+      () => {
+        this.loading.set(false);
+        this.loadFiles();
+      },
+      (msg) => {
+        this.loading.set(false);
+        this.error.set(msg);
+      }
+    );
   }
  
   onFolderPointerDown(e: PointerEvent, fileId: string) {
@@ -142,31 +119,15 @@ export class Home implements OnInit {
     ev.preventDefault();
   }
 
-  async deleteFile(id: string) {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (!user) {
-      this.error.set('Utente non autenticato');
-      return;
-    }
-
-    try {
-      const token = await user.getIdToken();
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-      this.http.delete(`${environment.apiBaseUrl}/files/${id}`, { headers })
-        .subscribe({
-          next: () => {
-            this.files.update(list => list.filter(f => f.id !== id));
-          },
-          error: () => {
-            this.error.set('Impossibile eliminare il file');
-          }
-        });
-    } catch {
-      this.error.set('Errore di autenticazione');
-    }
+  deleteFile(id: string) {
+    this.fileService.deleteFile(id).subscribe({
+      next: () => {
+        this.files.update(list => list.filter(f => f.id !== id));
+      },
+      error: () => {
+        this.error.set('Impossibile eliminare il file');
+      }
+    });
   }
 
   onTrashDrop(ev: DragEvent) {

@@ -12,6 +12,8 @@ import {
 } from 'firebase/auth';
 import { app } from '../firebase.config';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
+import { Observable, from, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +30,20 @@ export class AuthService {
 
   getCurrentUser(): User | null {
     return this.auth?.currentUser ?? null;
+  }
+
+  async getAuthToken(): Promise<string | null> {
+    if (!this.auth) return null;
+
+    const user = await new Promise<User | null>((resolve) => {
+      const unsubscribe = onAuthStateChanged(this.auth!, (u) => {
+        unsubscribe();
+        resolve(u);
+      });
+    });
+
+    if (!user) return null;
+    return await user.getIdToken();
   }
 
   onAuthStateChanged(callback: (user: User | null) => void): void {
@@ -57,3 +73,21 @@ export class AuthService {
     await signOut(this.auth);
   }
 }
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  
+  return from(authService.getAuthToken()).pipe(
+    switchMap(token => {
+      if (token) {
+        const authReq = req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        return next(authReq);
+      }
+      return next(req);
+    })
+  );
+};
