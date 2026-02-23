@@ -19,7 +19,7 @@
 }
 
 /* ============================= */
-/* DELETE MODE (overlay + trash) */
+/* DELETE MODE + DRAG (UI) */
 /* ============================= */
 
 /* Overlay per uscire dalla modalità elimina cliccando fuori */
@@ -33,12 +33,12 @@
 /* Wrapper attorno a <app-folder-preview> (serve per pointer/drag/title) */
 .folder-item {
   position: relative;
-  z-index: 60; /* sopra l’overlay */
+  z-index: 60;
   transition: transform 0.15s ease, opacity 0.15s ease;
   user-select: none;
 }
 
-/* “Wiggle” leggero quando deleteMode è attivo */
+
 .folder-item.is-delete-mode {
   cursor: grab;
   animation: wiggle 0.25s ease-in-out infinite alternate;
@@ -51,7 +51,7 @@
   animation: none;
 }
 
-/* Animazione tipo iOS (molto leggera) */
+/* Animazione simile a iOS  */
 @keyframes wiggle {
   from {
     transform: rotate(-1deg);

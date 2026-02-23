@@ -32,7 +32,6 @@ export class Home implements OnInit {
   loading = signal(false);
   error = signal<string | null>(null);
 
-  // ✅ modalità elimina + drag state (solo frontend)
   deleteMode = signal(false);
   draggedFileId = signal<string | null>(null);
 
@@ -100,10 +99,7 @@ export class Home implements OnInit {
     console.log('File received:', file);
   }
 
-  // ===========================
-  // ✅ LONG PRESS + TRASH (UI)
-  // ===========================
-
+ 
   onFolderPointerDown(e: PointerEvent, fileId: string) {
     // su touch evita long-press menu/scroll selection
     if (e.pointerType === 'touch') {
@@ -126,7 +122,7 @@ export class Home implements OnInit {
   }
 
   onFolderClick(fileId: string) {
-    // se long press è scattato o siamo in delete mode, non aprire il quiz
+    // se long press è attivo o siamo in delete mode, non apre il quiz
     if (this.longPressTriggered || this.deleteMode()) return;
     this.openQuiz(fileId);
   }
