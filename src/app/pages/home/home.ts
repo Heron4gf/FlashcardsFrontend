@@ -98,7 +98,6 @@ export class Home implements OnInit {
   handleFile(file: File) {
     console.log('File received:', file);
   }
-
  
   onFolderPointerDown(e: PointerEvent, fileId: string) {
     // su touch evita long-press menu/scroll selection
@@ -143,6 +142,33 @@ export class Home implements OnInit {
     ev.preventDefault();
   }
 
+  async deleteFile(id: string) {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      this.error.set('Utente non autenticato');
+      return;
+    }
+
+    try {
+      const token = await user.getIdToken();
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+      this.http.delete(`${environment.apiBaseUrl}/files/${id}`, { headers })
+        .subscribe({
+          next: () => {
+            this.files.update(list => list.filter(f => f.id !== id));
+          },
+          error: () => {
+            this.error.set('Impossibile eliminare il file');
+          }
+        });
+    } catch {
+      this.error.set('Errore di autenticazione');
+    }
+  }
+
   onTrashDrop(ev: DragEvent) {
     ev.preventDefault();
 
@@ -150,7 +176,7 @@ export class Home implements OnInit {
     const id = this.draggedFileId() ?? fromDt ?? null;
 
     if (id) {
-      this.files.update(list => list.filter(f => f.id !== id));
+      this.deleteFile(id);
     }
 
     this.draggedFileId.set(null);
