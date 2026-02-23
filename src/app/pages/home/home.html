@@ -22,11 +22,9 @@
         </div>
 
       } @else {
-        <!-- Grid cartelle + listener ESC -->
         <div class="col-12 folder-grid" (window:keydown)="onKeydown($event)">
 
           @for (file of files(); track file.id) {
-            <!-- Wrapper DOM per long-press + drag -->
             <div
               class="folder-item"
               [class.is-delete-mode]="deleteMode()"
@@ -51,15 +49,15 @@
 
         </div>
 
-        <!-- Overlay + cestino (solo quando deleteMode attivo) -->
         @if (deleteMode()) {
+          <!-- clic fuori = esci -->
           <div class="delete-overlay" (click)="exitDeleteMode()"></div>
 
+          <!-- cestino -->
           <div
             class="trash-dock"
             (dragover)="onTrashDragOver($event)"
             (drop)="onTrashDrop($event)"
-            (click)="$event.stopPropagation()"
           >
             <div class="trash-pill">
               🗑️ Trascina qui per eliminare

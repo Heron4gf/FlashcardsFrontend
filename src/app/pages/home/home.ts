@@ -32,11 +32,11 @@ export class Home implements OnInit {
   loading = signal(false);
   error = signal<string | null>(null);
 
-  // ✅ modalità "elimina" + drag state (solo frontend)
+  // ✅ modalità elimina + drag state (solo frontend)
   deleteMode = signal(false);
-  draggedFileId = signal<number | null>(null);
+  draggedFileId = signal<string | null>(null);
 
-  private longPressTimer: any = null;
+  private longPressTimer: ReturnType<typeof setTimeout> | null = null;
   private longPressTriggered = false;
 
   async ngOnInit() {
@@ -67,22 +67,14 @@ export class Home implements OnInit {
       .subscribe({
         next: (response) => {
           const formattedFiles: FileItem[] = response.map(file => {
-            // Rimuove .pdf (case insensitive) + sostituisce _ con spazi
             const fullName = file.name
               .replace(/\.pdf$/i, '')
               .replace(/_/g, ' ');
 
-            // Tronca a 20 caratteri
             const displayName =
-              fullName.length > 20
-                ? fullName.substring(0, 20) + '...'
-                : fullName;
+              fullName.length > 20 ? fullName.substring(0, 20) + '...' : fullName;
 
-            return {
-              ...file,
-              fullName,
-              displayName
-            };
+            return { ...file, fullName, displayName };
           });
 
           this.files.set(formattedFiles);
@@ -94,8 +86,7 @@ export class Home implements OnInit {
           this.loading.set(false);
         }
       });
-
-    } catch (err) {
+    } catch {
       this.error.set('Errore di autenticazione');
       this.loading.set(false);
     }
@@ -113,9 +104,8 @@ export class Home implements OnInit {
   // ✅ LONG PRESS + TRASH (UI)
   // ===========================
 
-  // Long press start (da collegare nel template a (pointerdown))
-  onFolderPointerDown(e: PointerEvent, fileId: number) {
-    // evita selezioni/menù contestuale su touch
+  onFolderPointerDown(e: PointerEvent, fileId: string) {
+    // su touch evita long-press menu/scroll selection
     if (e.pointerType === 'touch') {
       e.preventDefault();
     }
@@ -128,7 +118,6 @@ export class Home implements OnInit {
     }, 450);
   }
 
-  // Long press cancel (da collegare nel template a pointerup/cancel/leave)
   onFolderPointerUpOrCancel() {
     if (this.longPressTimer) {
       clearTimeout(this.longPressTimer);
@@ -136,41 +125,35 @@ export class Home implements OnInit {
     }
   }
 
-  // Click cartella: se non siamo in deleteMode, apri quiz
-  onFolderClick(fileId: number) {
-    if (this.longPressTriggered || this.deleteMode()) {
-      return;
-    }
+  onFolderClick(fileId: string) {
+    // se long press è scattato o siamo in delete mode, non aprire il quiz
+    if (this.longPressTriggered || this.deleteMode()) return;
     this.openQuiz(fileId);
   }
 
-  // Drag start (solo se deleteMode attivo)
-  onFolderDragStart(ev: DragEvent, fileId: number) {
+  onFolderDragStart(ev: DragEvent, fileId: string) {
     if (!this.deleteMode()) return;
 
     this.draggedFileId.set(fileId);
-
-    // compatibilità HTML5 DnD
-    ev.dataTransfer?.setData('text/plain', String(fileId));
+    ev.dataTransfer?.setData('text/plain', fileId);
+    ev.dataTransfer?.setDragImage?.((ev.target as HTMLElement), 40, 40);
   }
 
   onFolderDragEnd() {
     this.draggedFileId.set(null);
   }
 
-  // Consentire drop sul cestino
   onTrashDragOver(ev: DragEvent) {
     ev.preventDefault();
   }
 
-  // Drop sul cestino => elimina solo in frontend
   onTrashDrop(ev: DragEvent) {
     ev.preventDefault();
 
     const fromDt = ev.dataTransfer?.getData('text/plain');
-    const id = this.draggedFileId() ?? (fromDt ? Number(fromDt) : null);
+    const id = this.draggedFileId() ?? fromDt ?? null;
 
-    if (typeof id === 'number' && !Number.isNaN(id)) {
+    if (id) {
       this.files.update(list => list.filter(f => f.id !== id));
     }
 
@@ -178,13 +161,11 @@ export class Home implements OnInit {
     this.deleteMode.set(false);
   }
 
-  // Uscita manuale dalla modalità elimina (overlay click / pulsante)
   exitDeleteMode() {
     this.draggedFileId.set(null);
     this.deleteMode.set(false);
   }
 
-  // ESC per uscire (collega (window:keydown) nel template)
   onKeydown(ev: KeyboardEvent) {
     if (ev.key === 'Escape' && this.deleteMode()) {
       this.exitDeleteMode();

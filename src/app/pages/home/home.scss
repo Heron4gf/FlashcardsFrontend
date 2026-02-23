@@ -19,39 +19,39 @@
 }
 
 /* ============================= */
-/* DELETE MODE UI */
+/* DELETE MODE (overlay + trash) */
 /* ============================= */
 
-/* Overlay semi-trasparente */
+/* Overlay per uscire dalla modalità elimina cliccando fuori */
 .delete-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(2px);
   z-index: 50;
 }
 
-/* Wrapper cartella */
+/* Wrapper attorno a <app-folder-preview> (serve per pointer/drag/title) */
 .folder-item {
   position: relative;
-  z-index: 60;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  z-index: 60; /* sopra l’overlay */
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  user-select: none;
 }
 
-/* Quando deleteMode è attivo */
+/* “Wiggle” leggero quando deleteMode è attivo */
 .folder-item.is-delete-mode {
   cursor: grab;
   animation: wiggle 0.25s ease-in-out infinite alternate;
 }
 
-/* Quando sto trascinando */
+/* Quando l’elemento è in trascinamento */
 .folder-item.is-dragging {
-  opacity: 0.4;
-  transform: scale(0.9);
+  opacity: 0.45;
+  transform: scale(0.92);
   animation: none;
 }
 
-/* Animazione leggera stile iOS */
+/* Animazione tipo iOS (molto leggera) */
 @keyframes wiggle {
   from {
     transform: rotate(-1deg);
@@ -61,10 +61,7 @@
   }
 }
 
-/* ============================= */
-/* TRASH DOCK */
-/* ============================= */
-
+/* Cestino fisso in basso al centro */
 .trash-dock {
   position: fixed;
   left: 50%;
@@ -77,18 +74,18 @@
 }
 
 .trash-pill {
-  background: white;
+  background: #ffffff;
   border-radius: 999px;
-  padding: 14px 24px;
+  padding: 14px 22px;
   font-weight: 600;
   font-size: 15px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Hover desktop */
 .trash-pill:hover {
-  transform: scale(1.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  transform: scale(1.04);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.20);
 }
