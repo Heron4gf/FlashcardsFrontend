@@ -6,9 +6,10 @@ import { getAuth } from 'firebase/auth';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { UploadContainer } from '../../components/upload-container/upload-container';
 import { FolderPreview } from '../../components/folder-preview/folder-preview';
+import { environment } from '../../environments/environment.local';
 
 interface FileItem {
-  id: number;
+  id: string;
   name: string;
   preview: string;
   displayName: string; // nome troncato per UI
@@ -53,7 +54,7 @@ export class Home implements OnInit {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       
       this.http.get<Omit<FileItem, 'displayName' | 'fullName'>[]>(
-        'http://localhost:9090/api/v1/get-files',
+        `${environment.apiBaseUrl}/files`,
         { headers }
       )
       .subscribe({
@@ -95,7 +96,7 @@ export class Home implements OnInit {
     }
   }
 
-  openQuiz(fileId: number) {
+  openQuiz(fileId: string) {
     this.router.navigate(['/quiz', fileId]);
   }
 

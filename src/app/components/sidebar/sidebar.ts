@@ -32,7 +32,7 @@ export class Sidebar {
       const token = await user.getIdToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       
-      this.http.get<FileItem[]>('http://localhost:9090/api/v1/get-files', { headers })
+      this.http.get<FileItem[]>('http://localhost:9090/api/v1/files', { headers })
         .subscribe({
           next: (files) => {
             if (files.length === 0) {
