@@ -57,29 +57,6 @@
   }
 }
 
-.btn-primary {
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  background: #3b82f6;
-  border: none;
-  transition: background 0.2s, transform 0.1s;
-
-  &:hover:not(:disabled) {
-    background: #2563eb;
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.98);
-  }
-
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-}
-
 .divider {
   display: flex;
   align-items: center;
