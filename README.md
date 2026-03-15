@@ -57,14 +57,30 @@ SSR is configured with server output mode, and server routes are currently set t
 
 ## Prerequisites
 
-Before running the app, configure Firebase values in:
+Before running the app, you must set up your local environment variables and configurations.
 
+**1. Local Environment Setup**
+The application relies on a local environment file that is not committed to version control. You must manually create it:
+- Navigate to `src/environments/` (create the folder if it does not exist).
+- Create a file named `environment.local.ts`.
+- Add the following basic structure and update it with your local keys:
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:9090',
+  // Add any other specific local keys here
+};
+```
+
+**2. Firebase Configuration**
+Configure Firebase values in:
 - `src/app/firebase.config.ts`
 
 Replace placeholder values (`YOUR_API_KEY`, `YOUR_AUTH_DOMAIN`, etc.) with real project credentials.
 
-The frontend also expects a backend API running on `http://localhost:9090` with endpoints used by the app, including:
-
+**3. Backend API**
+The frontend expects a backend API running on `http://localhost:9090` (or the URL specified in your `environment.local.ts`) with endpoints used by the app, including:
 - `GET /api/v1/get-files`
 - `POST /api/v1/upload-file`
 - `POST /api/v1/get-flashcards`
